@@ -19,15 +19,18 @@ router.get('/test', (req, res) =>
 // @desc Register users route
 // @access Public
 router.post('/register', (req, res) => {
+  // Pull values off req
+  const { name, email, password } = req.body;
+
   // Look for preexisting user
-  User.findOne({ email: req.body.email }).then(user => {
+  User.findOne({ email }).then(user => {
     // If found, send error message
     if (user) {
       return res.status(400).json({ email: 'Email already exists' });
       // If not, create new user
     } else {
       // Create avatar
-      const avatar = gravatar.url(req.body.email, {
+      const avatar = gravatar.url(email, {
         s: '200', // size
         r: 'pg', // rating
         d: 'mm' // default
@@ -35,15 +38,15 @@ router.post('/register', (req, res) => {
 
       // Create new user object
       const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
+        name,
+        email,
         avatar,
-        password: req.body.password
+        password
       });
 
       // Hash password
       bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
+        bcrypt.hash(password, salt, (err, hash) => {
           if (err) throw err;
           newUser.password = hash;
 
