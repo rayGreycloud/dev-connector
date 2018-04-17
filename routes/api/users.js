@@ -7,6 +7,9 @@ const passport = require('passport');
 
 const keys = require('../../config/keys');
 
+// Load input validation
+const validateRegisterInput = require('../../validation/register');
+
 // Load User model
 const User = require('../../models/User');
 
@@ -63,6 +66,13 @@ router.post('/login', async (req, res) => {
 // @desc Register users route
 // @access Public
 router.post('/register', async (req, res) => {
+  // Run validation on input
+  const { errors, isValid } = validateRegisterInput(req.body);
+  // Check validation result
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   // Pull values off req
   const { name, email, password } = req.body;
 
@@ -94,10 +104,9 @@ router.post('/register', async (req, res) => {
 
   // If found, send error message
   if (user) {
-    console.log(user);
-    return res.status(400).json({
-      email: 'Email already exists'
-    });
+    errors.email = 'Email already exists';
+
+    return res.status(400).json(errors);
   }
 
   // If not, create new user
