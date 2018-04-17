@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const keys = require('../../config/keys');
 
 // Load User model
 const User = require('../../models/User');
@@ -14,52 +17,6 @@ router.get('/test', (req, res) =>
     msg: 'Users works!'
   })
 );
-
-// // @route POST api/users/register
-// // @desc Register users route
-// // @access Public
-// router.post('/register', (req, res) => {
-//   // Pull values off req
-//   const { name, email, password } = req.body;
-
-//   // Look for preexisting user
-//   User.findOne({ email }).then(user => {
-//     // If found, send error message
-//     if (user) {
-//       return res.status(400).json({ email: 'Email already exists' });
-//       // If not, create new user
-//     } else {
-//       // Create avatar
-//       const avatar = gravatar.url(email, {
-//         s: '200', // size
-//         r: 'pg', // rating
-//         d: 'mm' // default
-//       });
-
-//       // Create new user object
-//       const newUser = new User({
-//         name,
-//         email,
-//         avatar,
-//         password
-//       });
-
-//       // Hash password
-//       bcrypt.genSalt(10, (err, salt) => {
-//         bcrypt.hash(password, salt, (err, hash) => {
-//           if (err) throw err;
-//           newUser.password = hash;
-
-//           // Save new user
-//           newUser
-//             .save()
-//             .then(user => res.json(user))
-//             .catch(err => console.log(err));
-//         });
-//       });
-//     }
-//   });
-// });
 
 // @route POST api/users/login
 // @desc Login user route / Returning JWT token
@@ -81,8 +38,22 @@ router.post('/login', async (req, res) => {
 
   // Check result and send appropriate msg
   if (isMatch) {
-    res.json({ msg: 'Success' });
+    // Create payload
+    const payload = {
+      id: user.id,
+      name: user.name,
+      avatar: user.avatar
+    };
+
+    // Sign token
+    const token = jwt.sign(payload, keys.secretOrKey, { expiresIn: '1hr' });
+
+    res.json({
+      success: true,
+      token: `Bearer ${token}`
+    });
   } else {
+    // If no match, send error message
     return res.status(400).json({ password: 'Password incorrect' });
   }
 });
