@@ -15,50 +15,129 @@ router.get('/test', (req, res) =>
   })
 );
 
-// @route [POST api/users/register
+// // @route POST api/users/register
+// // @desc Register users route
+// // @access Public
+// router.post('/register', (req, res) => {
+//   // Pull values off req
+//   const { name, email, password } = req.body;
+
+//   // Look for preexisting user
+//   User.findOne({ email }).then(user => {
+//     // If found, send error message
+//     if (user) {
+//       return res.status(400).json({ email: 'Email already exists' });
+//       // If not, create new user
+//     } else {
+//       // Create avatar
+//       const avatar = gravatar.url(email, {
+//         s: '200', // size
+//         r: 'pg', // rating
+//         d: 'mm' // default
+//       });
+
+//       // Create new user object
+//       const newUser = new User({
+//         name,
+//         email,
+//         avatar,
+//         password
+//       });
+
+//       // Hash password
+//       bcrypt.genSalt(10, (err, salt) => {
+//         bcrypt.hash(password, salt, (err, hash) => {
+//           if (err) throw err;
+//           newUser.password = hash;
+
+//           // Save new user
+//           newUser
+//             .save()
+//             .then(user => res.json(user))
+//             .catch(err => console.log(err));
+//         });
+//       });
+//     }
+//   });
+// });
+
+// @route POST api/users/login
+// @desc Login user route / Returning JWT token
+// @access Public
+router.post('/login', async (req, res) => {
+  // Pull values off request
+  const { email, password } = req.body;
+
+  // Find user by email
+  const user = await User.findOne({ email });
+
+  // If none, send error msg
+  if (!user) {
+    return res.status(404).json({ email: 'User not found' });
+  }
+
+  // Check password
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  // Check result and send appropriate msg
+  if (isMatch) {
+    res.json({ msg: 'Success' });
+  } else {
+    return res.status(400).json({ password: 'Password incorrect' });
+  }
+});
+
+// @route POST api/users/register
 // @desc Register users route
 // @access Public
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   // Pull values off req
   const { name, email, password } = req.body;
 
+  const createNewUser = async (_name, _email, _password) => {
+    // Create avatar
+    const avatar = gravatar.url(email, {
+      s: '200', // size
+      r: 'pg', // rating
+      d: 'mm' // default
+    });
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(_password, salt);
+
+    // Create new user object
+    const newUser = new User({
+      name: _name,
+      email: _email,
+      avatar,
+      password: hash
+    });
+
+    return newUser;
+  };
+
   // Look for preexisting user
-  User.findOne({ email }).then(user => {
-    // If found, send error message
-    if (user) {
-      return res.status(400).json({ email: 'Email already exists' });
-      // If not, create new user
-    } else {
-      // Create avatar
-      const avatar = gravatar.url(email, {
-        s: '200', // size
-        r: 'pg', // rating
-        d: 'mm' // default
-      });
+  const user = await User.findOne({ email });
 
-      // Create new user object
-      const newUser = new User({
-        name,
-        email,
-        avatar,
-        password
-      });
+  // If found, send error message
+  if (user) {
+    console.log(user);
+    return res.status(400).json({
+      email: 'Email already exists'
+    });
+  }
 
-      // Hash password
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, (err, hash) => {
-          if (err) throw err;
-          newUser.password = hash;
+  // If not, create new user
+  const newUser = await createNewUser(name, email, password);
 
-          // Save new user
-          newUser
-            .save()
-            .then(user => res.json(user))
-            .catch(err => console.log(err));
-        });
-      });
-    }
-  });
+  // Save to DB
+  try {
+    const result = await newUser.save();
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 module.exports = router;
