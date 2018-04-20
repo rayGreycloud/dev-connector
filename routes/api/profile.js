@@ -59,13 +59,15 @@ router.post(
     const profileFields = {
       social: {}
     };
+    profileFields.user = req.user.id;
 
     // Iterate thru request props
     for (const prop in req.body) {
       switch (prop) {
         // Split skills prop into array
         case 'skills':
-          profileFields.skills = req.body.skills.split(',');
+          let skills = req.body.skills.split(',');
+          profileFields.skills = skills.map(skill => skill.trim());
           break;
         // Set social object props
         case 'twitter':
@@ -92,17 +94,15 @@ router.post(
           )
           .then(profile => res.json(profile));
         } else {
+
           // Check if handle exists
-          Profile.findOne({ handle: profileFields.handle })
-            .then(profile => {
-              if (profile) {
-                errors.handle = 'That handle already exists';
-                res.status(400).json(errors);
-              }
-              // Save Profile
-              new Profile(profileFields)
-                .save()
-                .then(profile => res.json(profile));
+          Profile.findOne({ handle: profileFields.handle }).then(profile => {
+            if (profile) {
+              errors.handle = 'That handle already exists';
+              res.status(400).json(errors);
+            }
+            // Save Profile
+            new Profile(profileFields).save().then(profile => res.json(profile));
             });
         }
     });
