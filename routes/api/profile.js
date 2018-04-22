@@ -25,12 +25,13 @@ router.get('/test', (req, res) =>
 // @desc fetch profile route
 // @access Private
 router.get(
-  '/', 
+  '/',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
   const errors = {};
-
+  // Get user's own profile 
   Profile.findOne({ user: req.user.id })
+    // Populate name and avatar with user props
     .populate('user', ['name', 'avatar'])
     .then(profile => {
       if (!profile) {
@@ -47,8 +48,9 @@ router.get(
 // @access Public
 router.get('/all', (req, res) => {
   const errors = {};
-  
+  // Get all profiles 
   Profile.find()
+    // Populate name and avatar with user props
     .populate('user', ['name', 'avatar'])
     .then(profiles => {
       if (!profiles) {
@@ -66,8 +68,9 @@ router.get('/all', (req, res) => {
 // @access Public
 router.get('/handle/:handle', (req, res) => {
   const errors = {};
-  
+  // Get profile by user handle 
   Profile.findOne({ handle: req.params.handle })
+    // Populate name and avatar from user 
     .populate('user', ['name', 'avatar'])
     .then(profile => {
       if (!profile) {
@@ -86,8 +89,9 @@ router.get('/handle/:handle', (req, res) => {
 // @access Public
 router.get('/user/:user_id', (req, res) => {
   const errors = {};
-  
+  // Get user's profile by user's id 
   Profile.findOne({ user: req.params.user_id })
+    // Populate name and avatar from user 
     .populate('user', ['name', 'avatar'])
     .then(profile => {
       if (!profile) {
@@ -180,9 +184,10 @@ router.post(
   if (!isValid) {
     return res.status(400).json(errors);
   }    
-  
+  // Get user's profile
   Profile.findOne({ user: req.user.id })
     .then(profile => {
+      // Create experience object
       const newExp = {
         title: req.body.title,
         company: req.body.company,
@@ -192,9 +197,9 @@ router.post(
         current: req.body.current,
         description: req.body.description
       }
-      
+      // Add new experience to front of experience array
       profile.experience.unshift(newExp);
-      
+      // Save profile and return 
       profile.save().then(profile => res.json(profile));
     });
 });
@@ -212,9 +217,10 @@ router.post(
   if (!isValid) {
     return res.status(400).json(errors);
   }    
-  
+  // Get user's profile 
   Profile.findOne({ user: req.user.id })
     .then(profile => {
+      // Create new education object
       const newEd = {
         school: req.body.school,
         degree: req.body.degree,
@@ -224,9 +230,9 @@ router.post(
         current: req.body.current,
         description: req.body.description
       }
-      
+      // Add new education to front of education array
       profile.education.unshift(newEd);
-      
+      // Save profile and return
       profile.save().then(profile => res.json(profile));
     });
 });
@@ -289,9 +295,10 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     
-  // Get user profile
+  // Get user's profile and delete
   Profile.findOneAndRemove({ user: req.user.id })
     .then(() => {
+      // Get user and delete
       User.findOneAndRemove({ _id: req.user.id })
         .then(() => res.json({ success: true }));
     });
