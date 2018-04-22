@@ -25,7 +25,7 @@ router.get('/test', (req, res) =>
 // @desc fetch profile route
 // @access Private
 router.get(
-  '/',
+  '/', 
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
   const errors = {};
