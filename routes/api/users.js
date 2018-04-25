@@ -86,7 +86,27 @@ router.post('/register', async (req, res) => {
   // Pull values off req
   const { name, email, password } = req.body;
 
-  const createNewUser = async (_name, _email, _password) => {
+  // Look for preexisting user
+  const user = await User.findOne({ email });
+  // If found, send error message
+  if (user) {
+    errors.email = 'Email already exists';
+
+    return res.status(400).json(errors);
+  } else {
+    // If not, create new user
+    const newUser = await createNewUser(name, email, password);
+  
+    // Save to DB
+    try {
+      const result = await newUser.save();
+      res.json(result);
+    } catch (err) {
+      console.log(err);
+    }    
+  }
+  
+  async function createNewUser(_name, _email, _password) {
     // Create avatar
     const avatar = gravatar.url(email, {
       s: '200', // size
@@ -108,27 +128,6 @@ router.post('/register', async (req, res) => {
 
     return newUser;
   };
-
-  // Look for preexisting user
-  const user = await User.findOne({ email });
-
-  // If found, send error message
-  if (user) {
-    errors.email = 'Email already exists';
-
-    return res.status(400).json(errors);
-  }
-
-  // If not, create new user
-  const newUser = await createNewUser(name, email, password);
-
-  // Save to DB
-  try {
-    const result = await newUser.save();
-    res.json(result);
-  } catch (err) {
-    console.log(err);
-  }
 });
 
 // @route GET api/users/current
