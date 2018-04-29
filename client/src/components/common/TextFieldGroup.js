@@ -3,14 +3,14 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const TextFieldGroup = ({
-  name,
-  placeholder,
-  value,
-  error,
-  info,
   type,
+  error,
+  placeholder,
+  name,
+  value,
   onChange,
-  disabled
+  disabled,
+  info
 }) => {
   return (
     <div className="form-group">
@@ -32,14 +32,14 @@ const TextFieldGroup = ({
 };
 
 TextFieldGroup.propTypes = {
-  name: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  error: PropTypes.string,
-  info: PropTypes.string,
   type: PropTypes.string.isRequired,
+  error: PropTypes.string,
+  placeholder: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  disabled: PropTypes.string
+  disabled: PropTypes.string,
+  info: PropTypes.string
 };
 
 TextFieldGroup.defaultProps = {
