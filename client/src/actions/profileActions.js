@@ -67,9 +67,49 @@ export const addEducation = (eduData, history) => dispatch => {
     );
 };
 
+// Delete experience
+export const deleteExperience = id => dispatch => {
+  if (window.confirm('Are you sure you want to delete this?')) {
+    axios
+      .delete(`/api/profile/experience/${id}`)
+      .then(res =>
+        dispatch({
+          type: GET_PROFILE,
+          payload: res.data
+        })
+      )
+      .catch(err =>
+        dispatch({
+          type: GET_ERRORS,
+          payload: err.response.data
+        })
+      );
+  }
+};
+
+// Delete education
+export const deleteEducation = id => dispatch => {
+  if (window.confirm('Are you sure you want to delete this?')) {
+    axios
+      .delete(`/api/profile/education/${id}`)
+      .then(res =>
+        dispatch({
+          type: GET_PROFILE,
+          payload: res.data
+        })
+      )
+      .catch(err =>
+        dispatch({
+          type: GET_ERRORS,
+          payload: err.response.data
+        })
+      );
+  }
+};
+
 // Delete Account
 export const deleteAccount = () => dispatch => {
-  if (window.confirm('Are you sure? This can NOT be undone!')) {
+  if (window.confirm('Are you sure you want to delete your account?')) {
     axios
       .delete('/api/profile')
       .then(res =>
