@@ -308,17 +308,17 @@ class EditProfile extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  profile: state.profile,
-  errors: state.errors
-});
-
 EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
+
+const mapStateToProps = state => ({
+  profile: state.profile,
+  errors: state.errors
+});
 
 export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
   withRouter(EditProfile)
