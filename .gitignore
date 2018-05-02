@@ -2,3 +2,5 @@ node_modules/
 config/keys.js
 playground.*
 refactor.*
+client/src/components/ClassBoilerplate.js
+
