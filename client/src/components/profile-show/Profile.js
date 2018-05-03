@@ -37,8 +37,11 @@ class Profile extends Component {
           </div>{' '}
           {/*  End of Row */}
           <ProfileHeader profile={profile} />
-          <ProfileAbout />
-          <ProfileCreds />
+          <ProfileAbout profile={profile} />
+          <ProfileCreds
+            experience={profile.experience}
+            education={profile.education}
+          />
           <ProfileGithub />
         </div>
       );
