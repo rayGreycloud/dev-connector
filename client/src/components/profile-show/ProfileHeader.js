@@ -4,19 +4,24 @@ import isEmpty from '../../validation/is-empty';
 class ProfileHeader extends Component {
   render() {
     const { profile } = this.props;
-    let socialLinks;
+    let profileLinks;
 
     if (isEmpty(profile.social)) {
-      socialLinks = '';
+      profileLinks = '';
     } else {
       const socialProps = Object.keys(profile.social);
 
-      socialLinks = socialProps.map(prop => {
-        if (prop !== '') {
+      profileLinks = socialProps.map(prop => {
+        if (profile.social[prop] !== '') {
           let classnames = `fab fa-${prop} fa-2x`;
 
           return (
-            <a href={profile.social[prop]} className="text-white p-2">
+            <a
+              key={prop}
+              href={profile.social[prop]}
+              target="_blank"
+              className="text-white p-2"
+            >
               <i className={classnames} />
             </a>
           );
@@ -48,7 +53,18 @@ class ProfileHeader extends Component {
                 )}
               </p>
               {isEmpty(profile.location) ? null : <p>{profile.location}</p>}
-              <p>{socialLinks}</p>
+              <p>
+                {isEmpty(profile.website) ? null : (
+                  <a
+                    href={profile.website}
+                    target="_blank"
+                    className="text-white p-2"
+                  >
+                    <i className="fas fa-globe fa-2x" />
+                  </a>
+                )}
+                {profileLinks}
+              </p>
             </div>
           </div>
         </div>
