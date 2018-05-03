@@ -52,31 +52,30 @@ class EditProfile extends Component {
 
       const skillsCSV = profile.skills.join(',');
 
-      const socialProps = [
-        'twitter',
-        'facebook',
-        'linkedin',
-        'youtube',
-        'instagram'
-      ];
-
-      for (const prop in profile) {
-        if (prop === 'social') {
-          if (isEmpty(profile.social)) {
-            profile.social = {};
-          }
-
-          for (const socialProp in socialProps) {
-            profile[socialProp] = !isEmpty(profile.social[socialProp])
-              ? profile.social[socialProp]
-              : '';
-          }
-        } else {
-          if (isEmpty(profile[prop])) {
-            profile[prop] = '';
-          }
-        }
-      }
+      // If profile field doesnt exist, make empty string
+      profile.company = !isEmpty(profile.company) ? profile.company : '';
+      profile.website = !isEmpty(profile.website) ? profile.website : '';
+      profile.location = !isEmpty(profile.location) ? profile.location : '';
+      profile.githubusername = !isEmpty(profile.githubusername)
+        ? profile.githubusername
+        : '';
+      profile.bio = !isEmpty(profile.bio) ? profile.bio : '';
+      profile.social = !isEmpty(profile.social) ? profile.social : {};
+      profile.twitter = !isEmpty(profile.social.twitter)
+        ? profile.social.twitter
+        : '';
+      profile.facebook = !isEmpty(profile.social.facebook)
+        ? profile.social.facebook
+        : '';
+      profile.linkedin = !isEmpty(profile.social.linkedin)
+        ? profile.social.linkedin
+        : '';
+      profile.youtube = !isEmpty(profile.social.youtube)
+        ? profile.social.youtube
+        : '';
+      profile.instagram = !isEmpty(profile.social.instagram)
+        ? profile.social.instagram
+        : '';
 
       this.setState({
         handle: profile.handle,
@@ -100,11 +99,11 @@ class EditProfile extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
-
-    e.preventDefault();
   }
 
   onSubmit(e) {
+    e.preventDefault();
+
     const profileData = {
       handle: this.state.handle,
       company: this.state.company,
@@ -122,16 +121,14 @@ class EditProfile extends Component {
     };
 
     this.props.createProfile(profileData, this.props.history);
-
-    e.preventDefault();
   }
 
-  socialLinkToggle(e) {
+  socialLinkToggle() {
     this.setState(prevState => ({
       displaySocialInputs: !prevState.displaySocialInputs
     }));
 
-    e.preventDefault();
+    //    e.preventDefault();
   }
 
   render() {
@@ -286,6 +283,11 @@ class EditProfile extends Component {
                 <div className="mb-3">
                   <button
                     type="button"
+                    // onClick={() => {
+                    //   this.setState(prevState => ({
+                    //     displaySocialInputs: !prevState.displaySocialInputs
+                    //   }));
+                    // }}
                     onClick={this.socialLinkToggle.bind(this)}
                     className="btn btn-light"
                   >
