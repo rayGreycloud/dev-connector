@@ -32,6 +32,7 @@ class ProfileAbout extends Component {
               {profileSkills}
             </div>
           </div>
+          <hr />
         </div>
       </div>
     );
