@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import isEmpty from '../../validation/is-empty';
-import { keys } from '../../config/keys';
 
 class ProfileGithub extends Component {
   constructor(props) {
@@ -16,8 +15,16 @@ class ProfileGithub extends Component {
   }
 
   componentDidMount() {
-    const clientID = keys.githubClientID;
-    const clientSecret = keys.githubClientSecret;
+    let clientId, clientSecret;
+
+    if (process.env.NODE_ENV === 'production') {
+      clientId = require('./keys_prod').githubClientID;
+      clientSecret = require('./keys_prod').githubClientSecret;
+    } else {
+      clientId = require('./keys_dev').githubClientID;
+      clientSecret = require('./keys_dev').githubClientSecret;
+    }
+
     const { username } = this.props;
 
     if (isEmpty(username)) {
