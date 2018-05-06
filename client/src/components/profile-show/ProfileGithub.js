@@ -6,8 +6,10 @@ import isEmpty from '../../validation/is-empty';
 class ProfileGithub extends Component {
   constructor(props) {
     super(props);
-
+    // TODO: Refactor github repo fetch to backend api service
     this.state = {
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
       count: 5,
       sort: 'created: asc',
       repos: []
@@ -15,16 +17,7 @@ class ProfileGithub extends Component {
   }
 
   componentDidMount() {
-    let clientID, clientSecret;
-
-    if (process.env.NODE_ENV === 'production') {
-      clientID = process.env.GITHUB_CLIENT_ID;
-      clientSecret = process.env.GITHUB_CLIENT_SECRET;
-    } else {
-      clientID = require('../../config/keys_dev.js').githubClientID;
-      clientSecret = require('../../config/keys_dev.s').githubClientSecret;
-    }
-
+    const { clientID, clientSecret } = this.state;
     const { username } = this.props;
 
     if (isEmpty(username)) {
