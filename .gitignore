@@ -2,11 +2,8 @@
 node_modules/
 
 # security 
-config/*
-\!config/passport.js
+config/keys_dev.js
 
 # misc
 playground.*
 refactor.*
-client/src/components/ClassBoilerplate.js
-
