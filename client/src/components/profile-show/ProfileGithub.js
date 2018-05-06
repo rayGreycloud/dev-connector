@@ -18,11 +18,11 @@ class ProfileGithub extends Component {
     let clientId, clientSecret;
 
     if (process.env.NODE_ENV === 'production') {
-      clientId = require('./keys_prod').githubClientID;
-      clientSecret = require('./keys_prod').githubClientSecret;
+      clientId = require('../../config/keys_prod').githubClientID;
+      clientSecret = require('../../config/keys_prod').githubClientSecret;
     } else {
-      clientId = require('./keys_dev').githubClientID;
-      clientSecret = require('./keys_dev').githubClientSecret;
+      clientId = require('../../config/keys_dev').githubClientID;
+      clientSecret = require('../../config/keys_dev').githubClientSecret;
     }
 
     const { username } = this.props;
