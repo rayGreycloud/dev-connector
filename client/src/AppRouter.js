@@ -16,6 +16,7 @@ import AddEducation from './components/profile/AddEducation';
 import Profiles from './components/profiles/Profiles';
 import Profile from './components/profile-show/Profile';
 import Posts from './components/posts/Posts';
+import Post from './components/post/Post';
 
 const AppRouter = () => (
   <Router>
@@ -43,6 +44,7 @@ const AppRouter = () => (
           />
           <PrivateRoute exact path="/add-education" component={AddEducation} />
           <PrivateRoute exact path="/feed" component={Posts} />
+          <PrivateRoute exact path="/post/:id" component={Post} />
         </Switch>
         <Route path="/not-found" component={NotFound} />
       </div>
