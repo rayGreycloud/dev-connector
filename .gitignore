@@ -1,5 +1,11 @@
+# dependencies
 node_modules/
-config/keys.js
+
+# security 
+config/*
+\!config/passport.js
+
+# misc
 playground.*
 refactor.*
 client/src/components/ClassBoilerplate.js
