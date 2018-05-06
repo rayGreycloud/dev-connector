@@ -38,13 +38,13 @@ class PostItem extends Component {
       <div className="card card-body mb-3">
         <div className="row">
           <div className="col-md-2">
-            <a href="profile.html">
-              <img
-                className="rounded-circle d-md-block"
-                src={post.avatar}
-                alt="author avatar"
-              />
-            </a>
+            {/* TODO: create link to author's profile */}
+            <img
+              className="rounded-circle d-md-block"
+              src={post.avatar}
+              alt="author avatar"
+            />
+
             <br />
             <p className="text-center">{post.name}</p>
           </div>
