@@ -15,13 +15,13 @@ class ProfileGithub extends Component {
   }
 
   componentDidMount() {
-    let clientId, clientSecret;
+    let clientID, clientSecret;
 
     if (process.env.NODE_ENV === 'production') {
-      clientId = require('../../config/keys_prod').githubClientID;
+      clientID = require('../../config/keys_prod').githubClientID;
       clientSecret = require('../../config/keys_prod').githubClientSecret;
     } else {
-      clientId = require('../../config/keys_dev').githubClientID;
+      clientID = require('../../config/keys_dev').githubClientID;
       clientSecret = require('../../config/keys_dev').githubClientSecret;
     }
 
