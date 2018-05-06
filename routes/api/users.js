@@ -96,16 +96,16 @@ router.post('/register', async (req, res) => {
   } else {
     // If not, create new user
     const newUser = await createNewUser(name, email, password);
-  
+
     // Save to DB
     try {
       const result = await newUser.save();
       res.json(result);
     } catch (err) {
       console.log(err);
-    }    
+    }
   }
-  
+
   async function createNewUser(_name, _email, _password) {
     // Create avatar
     const avatar = gravatar.url(email, {
@@ -127,7 +127,7 @@ router.post('/register', async (req, res) => {
     });
 
     return newUser;
-  };
+  }
 });
 
 // @route GET api/users/current
