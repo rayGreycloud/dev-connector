@@ -1,8 +1,8 @@
 # dependencies
 node_modules/
 
-# security 
-config/keys_dev.js
+# security
+/secret/* 
 
 # misc
 playground.*
