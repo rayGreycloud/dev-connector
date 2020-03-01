@@ -2,9 +2,14 @@ img {
   width: 100%;
 }
 
+.app {
+  grid: auto-flow / minmax(1em, 1fr) minmax() minmax(1em, 1fr);
+  display: grid;
+}
+
 .landing {
   position: relative;
-  background: url('./img/showcase.jpg') no-repeat;
+  background: url("./img/showcase.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
