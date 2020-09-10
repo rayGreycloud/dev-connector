@@ -3,6 +3,7 @@ node_modules/
 
 # security
 /secret/* 
+/config/keys_dev.js
 
 # misc
 playground.*
